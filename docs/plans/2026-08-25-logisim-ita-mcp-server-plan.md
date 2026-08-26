@@ -2,6 +2,24 @@
 
 > **SM Project**: `logisim-ita-mcp-server-2026-08-25` (`f75ede4f`)
 > **Created**: 2026-08-25 | **Author**: Cline | **Status**: PLAN
+> **Created**: 2026-08-25 | **Author**: Cline | **Status**: ACTIVE — Option 1 approved
+> **Updated**: 2026-08-25 — Forked MCPs (logisim-mcp, logisim-circuit-compiler) DEPRECATED for ITA; resume custom MCP
+
+## V1.1 UPDATE — CRITICAL DIRECTION CHANGE
+
+**Approved by Jason (2026-08-25)**: PAUSE generation via forked MCPs. RESUME custom `logisim-ita-mcp` server.
+
+**Why**: The forked `logisim-mcp` and `logisim-circuit-compiler` both target **Logisim Evolution 4.x**, NOT **Logisim ITA 2.16.x**. Their `.circ` output hangs ITA when loaded. The schemas differ (source attr, library system, component naming).
+
+**Deprecated**: Option A (`cpu_tuanis_option_A_quick_fix.circ`) and Option B (`cpu_tuanis_option_B_register_file.circ`) — experimental, unusable in ITA.
+
+**Key requirements for custom MCP going forward**:
+1. Parser/writer must match ITA 2.16.x schema EXACTLY (source="2.16.2.2.jar", classic #Wiring/#Gates/#Plexers/#Arithmetic/#Memory/#I/O/#Base libraries)
+2. Register-file generation must use CORRECT topology: MUX for read selection + Decoder for write-enable (NEVER naive wire-merging which shorts outputs)
+3. Every generated file must be validated by HEADLESS loading with the ITA JAR before GUI use
+4. Original hand-built circuit (`cpu tuanis...circ`) loads fine — use it as the golden reference
+
+
 
 ---
 

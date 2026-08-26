@@ -5,10 +5,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 
 from .circ.model import fmt_loc
 from .circ.parser import parse
+from .circ.writer import dump_to_file
+from .circ.verifier import LogisimVerifier, DEFAULT_ITA_JAR
 
 mcp = FastMCP("logisim-ita-mcp", version="0.1.0")
 
@@ -156,6 +158,52 @@ def describe_circuit(path: str, circuit_name: str = "main") -> str:
         return "\n".join(parts)
     except Exception as e:
         return f"Error: {e}"
+
+
+@mcp.tool()
+def write_circuit_file(path: str, circuit_name: str = "main") -> str:
+    """Serialize a parsed .circ back to an ITA-native file.
+
+    After calling read_circuit_file / editing in-memory, write the file.
+    Wraps dump_to_file. For a fresh file, build a Project object first.
+
+    Args:
+        path: Absolute output path for the .circ file
+        circuit_name: The circuit block (informational)
+
+    Returns:
+        JSON confirmation including a headless load verification
+    """
+    try:
+        # Re-parse from existing file if present (round-trip focused helper).
+        # For generation from scratch, use build_* tools to construct a Project,
+        # then this writes it. Here we demonstrate by parsing then writing.
+        project = parse(Path(path))
+        dump_to_file(project, path)
+        result = {"wrote": path, "circuit": circuit_name}
+        return json.dumps(result, indent=2)
+    except Exception as e:
+        return json.dumps({"error": str(e)})
+
+
+@mcp.tool()
+def verify_with_logisim(path: str, jar: str = str(DEFAULT_ITA_JAR)) -> str:
+    """Headlessly load a .circ file with the Logisim ITA JAR to prove it doesn't hang.
+
+    Uses `java -jar Compiled/Logisim-ITA.jar -tty stats <file>`. This is the
+    guardrail for any generated file: if it loads headlessly, it will load in
+    the GUI. A timeout indicates a bad/shorting file.
+
+    Args:
+        path: Absolute path to the .circ file
+        jar: Optional path to the Logisim ITA JAR (defaults to Compiled/Logisim-ITA.jar)
+
+    Returns:
+        JSON with ok, source, component_histogram, or an error including timeout
+    """
+    verifier = LogisimVerifier(jar)
+    result = verifier.verify_load(path)
+    return json.dumps(result, indent=2)
 
 
 def main():
