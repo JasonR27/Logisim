@@ -57,7 +57,7 @@ class CircuitWriter:
     def _write_circuit(self, circuit: Circuit) -> None:
         self._line(f'  <circuit name="{circuit.name}">')
         for name, val in circuit.attrs.items():
-            self._line(f'    <a name="{name}" val="{val}"/>')
+            self._line(self._attr_xml(name, val, indent="    "))
         # wires first (matching ITA convention)
         for wire in circuit.wires:
             self._write_wire(wire)
@@ -72,15 +72,37 @@ class CircuitWriter:
         self._line(f'    <wire from="{fmt_loc(wire.start)}" to="{fmt_loc(wire.end)}"/>')
 
     def _write_component(self, comp: Component) -> None:
-        # base tag
-        tag = f'    <comp lib="{comp.lib}" loc="{fmt_loc(comp.loc)}" name="{comp.name}"'
+        # ITA schema: a subcircuit instance has comp.lib == "" (the containing
+        # file is the registry), so it must OMIT the lib attribute.
+        # Only builtin/external components carry lib="N".
+        attrs_part = f' lib="{comp.lib}"' if comp.lib else ""
+        tag = f'    <comp{attrs_part} loc="{fmt_loc(comp.loc)}" name="{comp.name}"'
         if not comp.attrs:
             self._line(tag + "/>")
             return
         self._line(tag + ">")
         for name, val in comp.attrs.items():
-            self._line(f'      <a name="{name}" val="{val}"/>')
+            self._line(self._attr_xml(name, val, indent="      "))
         self._line("    </comp>")
+
+    @staticmethod
+    def _attr_xml(name: str, val: str, indent: str) -> str:
+        """Serialize one <a> attribute.
+
+        Single-line values -> `val="..."` attribute form (ITA convention).
+        Multi-line values (ROM/RAM 'contents', etc.) MUST use element-text
+        form `<a name="x">
+line1
+line2</a>` because XML attribute-value
+        normalization folds newlines into spaces — writing them as val=
+        silently corrupts data.
+        """
+        esc = (val.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                  .replace('"', "&quot;"))
+        if "\n" not in val:
+            return f'{indent}<a name="{name}" val="{esc}"/>'
+        inner = val.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        return f'{indent}<a name="{name}">{inner}</a>'
 
     def _line(self, text: str) -> None:
         self._out.append(text)

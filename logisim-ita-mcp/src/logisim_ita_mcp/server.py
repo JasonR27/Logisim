@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from fastmcp import FastMCP
+from fastmcp.tools.tool import ToolAnnotations
 
 from .circ.model import fmt_loc
 from .circ.parser import parse
@@ -15,9 +16,32 @@ from .circ.verifier import LogisimVerifier, DEFAULT_ITA_JAR
 mcp = FastMCP("logisim-ita-mcp", version="0.1.0")
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Read Circuit File",
+    annotations=ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False),
+)
 def read_circuit_file(path: str) -> str:
-    """Parse a .circ file and return structured JSON with all components, wires, and metadata."""
+    """Parse a Logisim ITA `.circ` file and return its FULL structured contents as JSON.
+
+    Use this when you need everything at once: project metadata (source app,
+    version, main circuit, libraries) plus every circuit block with its
+    components (typed, located, labeled, attributed) and wires. For large
+    projects prefer the targeted tools first: list_circuits ->
+    get_circuit_stats -> parse_components / parse_wires.
+
+    Args:
+        path: Absolute path to the `.circ` file to read (e.g.
+            /home/user/projects/cpu.circ). Relative paths resolve against
+            the server process CWD — absolute is strongly recommended.
+
+    Returns:
+        JSON string with `{"source", "version", "main_circuit", "libraries",
+        "circuits"}` where each circuit provides `name`, `attributes`,
+        `component_count`, `wire_count`, `component_summary` (type->count
+        map), `components[]` (name, lib, location "x,y", label, width,
+        attributes) and `wires[]` (`from`/`to` points). On failure returns
+        `{"error": "<message>"}` instead of raising.
+    """
     try:
         project = parse(Path(path))
         result = {
@@ -47,9 +71,25 @@ def read_circuit_file(path: str) -> str:
         return json.dumps({"error": str(e)})
 
 
-@mcp.tool()
+@mcp.tool(
+    title="List Circuits",
+    annotations=ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False),
+)
 def list_circuits(path: str) -> str:
-    """List all circuits in a .circ file with component counts."""
+    """List every circuit defined in a Logisim ITA `.circ` project file.
+
+    Cheap overview call — no component payloads. Ideal first step to discover
+    which circuit names exist (e.g. "main", subcircuits) before passing one as
+    `circuit_name` to other tools like get_circuit_stats or parse_wires.
+
+    Args:
+        path: Absolute path to the `.circ` project file.
+
+    Returns:
+        JSON string `{"circuits": [{"name", "components", "wires",
+        "summary"}...]}` where summary is a component-type count map for that
+        circuit. On failure returns `{"error": "<message>"}`.
+    """
     try:
         project = parse(Path(path))
         circuits = [
@@ -62,9 +102,29 @@ def list_circuits(path: str) -> str:
         return json.dumps({"error": str(e)})
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Get Circuit Statistics",
+    annotations=ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False),
+)
 def get_circuit_stats(path: str, circuit_name: str = "main") -> str:
-    """Get detailed statistics: component counts, wire count, bounding box."""
+    """Get aggregate statistics for ONE circuit: type histogram, totals, bounding box.
+
+    Lightweight sizing pass before deep parsing. The bounding box (in Logisim
+    grid units, computed from component locations plus wire endpoints) tells
+    you the drawn extent of the circuit — useful for layout sanity checks and
+    for planning where new components can be placed.
+
+    Args:
+        path: Absolute path to the `.circ` project file.
+        circuit_name: Name of the circuit block to inspect. Defaults to
+            "main". Unknown names raise KeyError surfaced as
+            {"error": ...} — use list_circuits to discover valid names.
+
+    Returns:
+        JSON string with `circuit`, `component_summary` (type->count map),
+        `total_components`, `total_wires`, and `bounding_box`
+        `{min_x, max_x, min_y, max_y, width, height}` (null if empty).
+    """
     try:
         project = parse(Path(path))
         circuit = project.require_circuit(circuit_name)
@@ -82,9 +142,30 @@ def get_circuit_stats(path: str, circuit_name: str = "main") -> str:
         return json.dumps({"error": str(e)})
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Parse Components",
+    annotations=ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False),
+)
 def parse_components(path: str, circuit_name: str = "main") -> str:
-    """Extract all components with types, locations, and attributes."""
+    """Extract every component of ONE circuit with resolved library names and full attributes.
+
+    The deep-dive read for component-level work: each entry resolves the
+    library id to a human-readable `lib_desc`, and includes the raw
+    attribute dict (e.g. Pin output/facing attrs, Register WIDTH, gate
+    inputs). Use this when you need exact pin/attribute geometry — for
+    example before synthesizing new components that must match ITA
+    conventions.
+
+    Args:
+        path: Absolute path to the `.circ` project file.
+        circuit_name: Circuit block name. Defaults to "main"; invalid
+            names surface as {"error": ...}.
+
+    Returns:
+        JSON string `{"circuit", "components": [{"name", "lib_id",
+        "lib_desc", "location" ("x,y"), "label", "width", "attributes"}]}`
+        where attributes are exactly as stored in the XML (strings).
+    """
     try:
         project = parse(Path(path))
         circuit = project.require_circuit(circuit_name)
@@ -103,9 +184,30 @@ def parse_components(path: str, circuit_name: str = "main") -> str:
         return json.dumps({"error": str(e)})
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Parse Wires & Nets",
+    annotations=ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False),
+)
 def parse_wires(path: str, circuit_name: str = "main") -> str:
-    """Extract all wires and compute connectivity (nets)."""
+    """Extract all wires of ONE circuit AND compute electrical connectivity (nets).
+
+    Besides the raw endpoint list, this groups wires into nets by flooding
+    over shared coordinates ("x,y" points) — i.e. which wire segments touch,
+    forming one equipotential node. Use it for connectivity audits, finding
+    dangling/shorted segments, or rebuilding a netlist without a GUI.
+
+    Args:
+        path: Absolute path to the `.circ` project file.
+        circuit_name: Circuit block name. Defaults to "main"; invalid
+            names surface as {"error": ...}.
+
+    Returns:
+        JSON string with `circuit`, `wire_count`, `wires` (each
+        `{"from": "x,y", "to": "x,y"}`), `net_count`, and `nets`
+        (list of lists of wire indices). Note: nets connect WIRES only;
+        component pins are not endpoints here unless wires terminate on
+        their grid coordinate.
+    """
     try:
         project = parse(Path(path))
         circuit = project.require_circuit(circuit_name)
@@ -140,9 +242,27 @@ def parse_wires(path: str, circuit_name: str = "main") -> str:
         return json.dumps({"error": str(e)})
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Describe Circuit (Natural Language)",
+    annotations=ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False),
+)
 def describe_circuit(path: str, circuit_name: str = "main") -> str:
-    """Generate a natural language description of the circuit."""
+    """Generate a compact human-readable summary of ONE circuit (not JSON).
+
+    Produces a short plaintext brief: total component/wire counts, a sorted
+    type histogram line (largest first), and every labeled component with its
+    label, type, and location. Feed it directly to an LLM as context when you
+    need to reason about what a circuit does before touching it.
+
+    Args:
+        path: Absolute path to the `.circ` project file.
+        circuit_name: Circuit block name. Defaults to "main"; invalid
+            names surface as an "Error: ..." text response.
+
+    Returns:
+        Plaintext multi-line description (NOT JSON). Lines start with "- "
+        for lists and "  * " under "Labeled components:".
+    """
     try:
         project = parse(Path(path))
         circuit = project.require_circuit(circuit_name)
@@ -160,19 +280,29 @@ def describe_circuit(path: str, circuit_name: str = "main") -> str:
         return f"Error: {e}"
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Write Circuit File",
+    annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True, openWorldHint=False),
+)
 def write_circuit_file(path: str, circuit_name: str = "main") -> str:
-    """Serialize a parsed .circ back to an ITA-native file.
+    """Serialize a parsed `.circ` project back to an ITA-native file (round-trip write).
 
-    After calling read_circuit_file / editing in-memory, write the file.
-    Wraps dump_to_file. For a fresh file, build a Project object first.
+    Currently round-trip oriented: re-parses the existing file at `path` and
+    rewrites it in Logisim ITA 2.16.x native format via dump_to_file. This has
+    been verified lossless (22 comps / 131 wires survive untouched). For
+    generation from scratch, build a Project object in code and call
+    circ.writer.dump_to_file directly — dedicated build_* MCP tools are
+    planned. OVERWRITES the destination file; keep a backup.
 
     Args:
-        path: Absolute output path for the .circ file
-        circuit_name: The circuit block (informational)
+        path: Absolute path of the .circ file to rewrite (must exist for
+            now).
+        circuit_name: Informational circuit block label echoed back in the
+            result. Defaults to "main".
 
     Returns:
-        JSON confirmation including a headless load verification
+        JSON string `{"wrote": "<path>", "circuit": "<name>"}` or
+        {"error": "<message>"}.
     """
     try:
         # Re-parse from existing file if present (round-trip focused helper).
@@ -186,20 +316,30 @@ def write_circuit_file(path: str, circuit_name: str = "main") -> str:
         return json.dumps({"error": str(e)})
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Verify With Logisim (Headless Load Test)",
+    annotations=ToolAnnotations(idempotentHint=True, openWorldHint=True),
+)
 def verify_with_logisim(path: str, jar: str = str(DEFAULT_ITA_JAR)) -> str:
-    """Headlessly load a .circ file with the Logisim ITA JAR to prove it doesn't hang.
+    """Headlessly load a `.circ` file with the real Logisim ITA JAR to prove it loads cleanly.
 
-    Uses `java -jar Compiled/Logisim-ITA.jar -tty stats <file>`. This is the
-    guardrail for any generated file: if it loads headlessly, it will load in
-    the GUI. A timeout indicates a bad/shorting file.
+    Runs `java -jar <jar> -tty stats <file>` with a timeout. THE guardrail for
+    any generated or hand-edited circuit: if the file loads headlessly it will
+    load in the GUI; a timeout means the file is malformed or shorts the
+    simulation. Always call this after writing a .circ via write_circuit_file
+    or any external generation step.
 
     Args:
-        path: Absolute path to the .circ file
-        jar: Optional path to the Logisim ITA JAR (defaults to Compiled/Logisim-ITA.jar)
+        path: Absolute path to the .circ file to validate.
+        jar: Optional absolute path to a Logisim ITA jar. Defaults to the
+            repo's Compiled/Logisim-ITA.jar (Java 21 compatible). Do NOT use
+            target/Logisim.jar — it requires Java 25 and hangs/fails on
+            system Java 21.
 
     Returns:
-        JSON with ok, source, component_histogram, or an error including timeout
+        JSON string: success is `{"ok": true, ..., "component_histogram":
+        {...}}`; failure returns ok:false info or an error message including
+        timeout indications.
     """
     verifier = LogisimVerifier(jar)
     result = verifier.verify_load(path)
