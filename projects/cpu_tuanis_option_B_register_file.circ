@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project source="2.16.2.2.jar" version="1.0">
+  This file is intended to be loaded by Logisim http://logisim.altervista.org
+
+  <lib desc="#Wiring" name="0"/>
+  <lib desc="#Gates" name="1"/>
+  <lib desc="#TTL" name="2"/>
+  <lib desc="#Plexers" name="3">
+    <tool name="Multiplexer">
+      <a name="enable" val="false"/>
+    </tool>
+    <tool name="Demultiplexer">
+      <a name="enable" val="false"/>
+    </tool>
+    <tool name="Decoder">
+      <a name="enable" val="false"/>
+    </tool>
+  </lib>
+  <lib desc="#Arithmetic" name="4"/>
+  <lib desc="#Memory" name="5">
+    <tool name="ROM">
+      <a name="contents">addr/data: 8 8
+0
+</a>
+    </tool>
+  </lib>
+  <lib desc="#I/O" name="6"/>
+  <lib desc="#Base" name="7">
+    <tool name="Text Tool">
+      <a name="text" val=""/>
+      <a name="font" val="Dialog plain 12"/>
+      <a name="color" val="#000000"/>
+      <a name="halign" val="center"/>
+      <a name="valign" val="base"/>
+    </tool>
+  </lib>
+  <main name="main"/>
+  <options>
+    <a name="gateUndefined" val="ignore"/>
+    <a name="simlimit" val="1000"/>
+    <a name="simrand" val="0"/>
+  </options>
+  <mappings>
+    <tool lib="7" map="Button2" name="Poke Tool"/>
+    <tool lib="7" map="Button3" name="Menu Tool"/>
+    <tool lib="7" map="Ctrl Button1" name="Menu Tool"/>
+  </mappings>
+  <toolbar>
+    <tool lib="7" name="Poke Tool"/>
+    <tool lib="7" name="Edit Tool"/>
+    <sep/>
+    <tool lib="7" name="Text Tool">
+      <a name="text" val=""/>
+      <a name="font" val="Dialog plain 12"/>
+      <a name="color" val="#000000"/>
+      <a name="halign" val="center"/>
+      <a name="valign" val="base"/>
+    </tool>
+    <tool lib="0" name="Pin">
+      <a name="tristate" val="false"/>
+    </tool>
+    <tool lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </tool>
+    <tool lib="1" name="NOT Gate"/>
+    <tool lib="1" name="AND Gate"/>
+    <tool lib="1" name="OR Gate"/>
+  </toolbar>
+  <circuit name="RegisterFile">
+    <a name="circuit" val="RegisterFile"/>
+    <a name="clabel" val="Register File"/>
+    <a name="clabelup" val="east"/>
+    <a name="clabelfont" val="Dialog plain 12"/>
+    <a name="clabelcolor" val="#000000"/>
+    <comp lib="0" loc="(100,100)" name="Pin">
+      <a name="width" val="3"/>
+      <a name="label" val="sel"/>
+    </comp>
+    <comp lib="0" loc="(100,140)" name="Pin">
+      <a name="width" val="3"/>
+      <a name="label" val="data"/>
+    </comp>
+    <comp lib="0" loc="(100,180)" name="Pin">
+      <a name="label" val="rw"/>
+    </comp>
+    <comp lib="0" loc="(100,220)" name="Pin">
+      <a name="label" val="clk"/>
+    </comp>
+    <comp lib="0" loc="(500,100)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+      <a name="label" val="out"/>
+    </comp>
+    <comp lib="0" loc="(500,140)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="8"/>
+      <a name="label" val="led"/>
+    </comp>
+    <comp lib="3" loc="(200,100)" name="Decoder">
+      <a name="facing" val="east"/>
+      <a name="select" val="3"/>
+      <a name="enable" val="false"/>
+    </comp>
+    <comp lib="5" loc="(300,100)" name="Register">
+      <a name="width" val="3"/>
+      <a name="label" val="R0"/>
+    </comp>
+    <comp lib="5" loc="(300,140)" name="Register">
+      <a name="width" val="3"/>
+      <a name="label" val="R1"/>
+    </comp>
+    <comp lib="5" loc="(300,180)" name="Register">
+      <a name="width" val="3"/>
+      <a name="label" val="R2"/>
+    </comp>
+    <comp lib="5" loc="(300,220)" name="Register">
+      <a name="width" val="3"/>
+      <a name="label" val="R3"/>
+    </comp>
+    <comp lib="5" loc="(300,260)" name="Register">
+      <a name="width" val="3"/>
+      <a name="label" val="R4"/>
+    </comp>
+    <comp lib="5" loc="(300,300)" name="Register">
+      <a name="width" val="3"/>
+      <a name="label" val="R5"/>
+    </comp>
+    <comp lib="5" loc="(300,340)" name="Register">
+      <a name="width" val="3"/>
+      <a name="label" val="R6"/>
+    </comp>
+    <comp lib="5" loc="(300,380)" name="Register">
+      <a name="width" val="3"/>
+      <a name="label" val="R7"/>
+    </comp>
+    <comp lib="3" loc="(400,100)" name="Multiplexer">
+      <a name="select" val="3"/>
+      <a name="width" val="3"/>
+      <a name="enable" val="false"/>
+    </comp>
+    <wire from="(100,100)" to="(150,100)"/>
+    <wire from="(250,100)" to="(280,100)"/>
+    <wire from="(250,110)" to="(280,140)"/>
+    <wire from="(250,120)" to="(280,180)"/>
+    <wire from="(250,130)" to="(280,220)"/>
+    <wire from="(250,140)" to="(280,260)"/>
+    <wire from="(250,150)" to="(280,300)"/>
+    <wire from="(250,160)" to="(280,340)"/>
+    <wire from="(250,170)" to="(280,380)"/>
+    <wire from="(100,140)" to="(280,100)"/>
+    <wire from="(100,140)" to="(280,140)"/>
+    <wire from="(100,140)" to="(280,180)"/>
+    <wire from="(100,140)" to="(280,220)"/>
+    <wire from="(100,140)" to="(280,260)"/>
+    <wire from="(100,140)" to="(280,300)"/>
+    <wire from="(100,140)" to="(280,340)"/>
+    <wire from="(100,140)" to="(280,380)"/>
+    <wire from="(100,220)" to="(280,100)"/>
+    <wire from="(100,220)" to="(280,140)"/>
+    <wire from="(100,220)" to="(280,180)"/>
+    <wire from="(100,220)" to="(280,220)"/>
+    <wire from="(100,220)" to="(280,260)"/>
+    <wire from="(100,220)" to="(280,300)"/>
+    <wire from="(100,220)" to="(280,340)"/>
+    <wire from="(100,220)" to="(280,380)"/>
+    <wire from="(350,100)" to="(380,100)"/>
+    <wire from="(350,140)" to="(380,110)"/>
+    <wire from="(350,180)" to="(380,120)"/>
+    <wire from="(350,220)" to="(380,130)"/>
+    <wire from="(350,260)" to="(380,140)"/>
+    <wire from="(350,300)" to="(380,150)"/>
+    <wire from="(350,340)" to="(380,160)"/>
+    <wire from="(350,380)" to="(380,170)"/>
+    <wire from="(100,100)" to="(380,100)"/>
+    <wire from="(450,100)" to="(500,100)"/>
+    <wire from="(350,100)" to="(500,140)"/>
+    <wire from="(350,140)" to="(500,140)"/>
+    <wire from="(350,180)" to="(500,140)"/>
+    <wire from="(350,220)" to="(500,140)"/>
+    <wire from="(350,260)" to="(500,140)"/>
+    <wire from="(350,300)" to="(500,140)"/>
+    <wire from="(350,340)" to="(500,140)"/>
+    <wire from="(350,380)" to="(500,140)"/>
+  </circuit>  <circuit name="main">
+    <a name="circuit" val="main"/>
+    <a name="clabel" val=""/>
+    <a name="clabelup" val="east"/>
+    <a name="clabelfont" val="Dialog plain 12"/>
+    <a name="clabelcolor" val="#000000"/>
+    <!-- Selection input (3-bit) -->
+    <comp lib="0" loc="(100,100)" name="Pin">
+      <a name="width" val="3"/>
+      <a name="label" val="sel"/>
+    </comp>
+    <!-- Data input (3-bit) -->
+    <comp lib="0" loc="(100,140)" name="Pin">
+      <a name="width" val="3"/>
+      <a name="label" val="data"/>
+    </comp>
+    <!-- Read/Write control -->
+    <comp lib="0" loc="(100,180)" name="Pin">
+      <a name="label" val="rw"/>
+    </comp>
+    <!-- Clock -->
+    <comp lib="0" loc="(100,220)" name="Clock"/>
+    <!-- Register File module instance -->
+    <comp lib="7" loc="(300,100)" name="RegisterFile">
+      <a name="label" val="RegFile8"/>
+    </comp>
+    <!-- LED matrix 2x4 to show which registers are in ONE -->
+    <comp lib="6" loc="(600,100)" name="DotMatrix">
+      <a name="matrixcols" val="2"/>
+      <a name="matrixrows" val="4"/>
+    </comp>
+    <!-- Wires: inputs to RegisterFile -->
+    <wire from="(100,100)" to="(250,100)"/>
+    <wire from="(100,140)" to="(250,140)"/>
+    <wire from="(100,180)" to="(250,180)"/>
+    <wire from="(100,220)" to="(250,220)"/>
+    <!-- Wires: RegisterFile led output to LED matrix -->
+    <wire from="(350,140)" to="(560,140)"/>
+    <wire from="(560,140)" to="(560,100)"/>
+    <wire from="(560,100)" to="(600,100)"/>
+  </circuit>
+</project>
