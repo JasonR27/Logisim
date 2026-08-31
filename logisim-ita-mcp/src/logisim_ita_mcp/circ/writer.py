@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .model import Circuit, Component, Lib, Project, Wire, fmt_loc
+from .model import Circuit, Component, Lib, Project, Wire, fmt_loc, wire_l_path
 
 
 @dataclass
@@ -28,6 +28,7 @@ class CircuitWriter:
 
     def write(self, project: Project) -> str:
         self._out = []
+        self._normalize_subcircuit_libs(project)
         self._line('<?xml version="1.0" encoding="UTF-8" standalone="no"?>')
         self._line(f'<project source="{project.source}" version="{project.version}">')
         if project.leading_text:
@@ -44,6 +45,22 @@ class CircuitWriter:
             self._write_circuit(circuit)
         self._line('</project>')
         return "\n".join(self._out)
+
+    def _normalize_subcircuit_libs(self, project: Project) -> None:
+        """Strip the ``lib`` attribute from subcircuit instances.
+
+        A ``<comp>`` whose name matches a circuit defined in this file is a
+        subcircuit instance and must carry NO ``lib`` attribute: Logisim's
+        ``findLibrary()`` resolves it against the file itself. Carrying
+        e.g. ``lib="7"`` makes the loader look inside library 7 (Base) and
+        fail with "component 'X' missing from library", which surfaces as a
+        modal error dialog during load.
+        """
+        circuit_names = {c.name for c in project.circuits}
+        for circuit in project.circuits:
+            for comp in circuit.components:
+                if comp.lib and comp.name in circuit_names:
+                    comp.lib = None
 
     def _write_lib(self, lib: Lib) -> None:
         if lib.tools_raw_xml:
@@ -69,12 +86,18 @@ class CircuitWriter:
         self._line("  </circuit>")
 
     def _write_wire(self, wire: Wire) -> None:
-        self._line(f'    <wire from="{fmt_loc(wire.start)}" to="{fmt_loc(wire.end)}"/>')
+        # Logisim ITA cannot load diagonal wires (WireRepair.doOverlaps hangs).
+        # The single source of truth for the axis-aligned L-split lives in
+        # model.wire_l_path — the same helper every generation tool must use.
+        for segment in wire_l_path(wire.start, wire.end):
+            self._line(f'    <wire from="{fmt_loc(segment.start)}" to="{fmt_loc(segment.end)}"/>')
 
     def _write_component(self, comp: Component) -> None:
-        # ITA schema: a subcircuit instance has comp.lib == "" (the containing
-        # file is the registry), so it must OMIT the lib attribute.
-        # Only builtin/external components carry lib="N".
+        # ITA schema: subcircuit instances use NO lib attribute (empty string).
+        # When lib is null/empty, Logisim's findLibrary() returns the file itself,
+        # which contains all circuits as tools. Using lib="7" looks in the Base
+        # library which does NOT contain subcircuits — causes "missing from library"
+        # errors. Only builtin/external components carry lib="N".
         attrs_part = f' lib="{comp.lib}"' if comp.lib else ""
         tag = f'    <comp{attrs_part} loc="{fmt_loc(comp.loc)}" name="{comp.name}"'
         if not comp.attrs:

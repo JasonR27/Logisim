@@ -317,6 +317,97 @@ def write_circuit_file(path: str, circuit_name: str = "main") -> str:
 
 
 @mcp.tool(
+    title="Generate Circuit File From Spec",
+    annotations=ToolAnnotations(destructiveHint=True, openWorldHint=False),
+)
+def generate_circuit_file(
+    path: str,
+    spec: str = "",
+    spec_file: str = "",
+    verify: bool = True,
+    jar: str = str(DEFAULT_ITA_JAR),
+) -> str:
+    """Generate a NEW Logisim ITA `.circ` file from a JSON spec — from-scratch generation.
+
+    THE sanctioned way to build circuits without hand-editing XML. Builds the
+    model via circ.generator and serializes through circ.writer, which enforces
+    every known load invariant automatically:
+
+    - Subcircuit instances (component name matching a circuit defined in the
+      spec) carry NO `lib` attribute — `lib="7"` is the known-broken pattern
+      (findLibrary() searches #Base which lacks subcircuits).
+    - Diagonal wires are auto-split into axis-aligned L-shaped pairs
+      (Logisim ITA hangs on diagonals).
+    - Multi-line attribute values (ROM/RAM contents) serialize as element
+      text, not val= attributes.
+
+    Spec shape (JSON string):
+      {"main"?: "main", "source"?: "2.16.2.2.jar", "version"?: "1.0",
+       "libraries"?: "standard" | [{"id", "desc", "tools_raw_xml"?}...],
+       "extras_raw_xml"?: "standard" | ["<options>...</options>", ...],
+       "circuits": [{"name": "REGISTROS8",
+           "attributes"?: {"circuit": "REGISTROS8", "clabel": "...",
+               "clabelup": "east", "clabelfont": "Dialog plain 12",
+               "clabelcolor": "#000000"},
+           "components": [{"name": "Pin", "lib"?: "0",
+               "loc": "(150,100)" | [150, 100], "attributes"?: {...}}...],
+           "wires"?: [["(150,100)", "(220,100)"] |
+               {"from": "(150,100)", "to": "(220,100)"}...]}]}
+    Subcircuit instances: OMIT "lib" and set the component name equal to a
+    circuit name defined in this same spec. Zero-length wires are rejected.
+
+    Args:
+        path: Absolute path of the .circ file to CREATE/OVERWRITE. Use a
+            scratch path (/tmp/...) for first attempts; never point at a
+            working reference without a backup.
+        spec: The JSON spec string (see above). Ignored when spec_file is set.
+        spec_file: Absolute path to a .json file containing the same spec
+            shape. Provide THIS for large circuits where the inline JSON
+            string is error-prone / unwieldy to transcribe (the generator
+            reads and JSON-parses the file). When spec_file is a non-empty
+            path, it takes precedence over `spec`.
+        verify: When true (default), run the headless Logisim load test plus
+            structural checks after writing and include the result.
+        jar: Optional absolute path to a Logisim ITA jar for verification.
+            Defaults to Compiled/Logisim-ITA.jar (Java 21). Do NOT use
+            target/Logisim.jar (needs Java 25).
+
+    Returns:
+        JSON string: `{"wrote": "<path>", "main": "...", "circuits":
+        [{"name", "components", "wires"}...], "verify": {...}}` or
+        `{"error": "<message>"}`.
+    """
+    import json as _json
+
+    from .circ.generator import generate_to_file
+    from .circ.verifier import LogisimVerifier, structural_checks
+
+    try:
+        if spec_file.strip():
+            raw = Path(spec_file).read_text(encoding="utf-8")
+        else:
+            raw = spec
+        result = generate_to_file(_json.loads(raw), path)
+        if verify:
+            vres = LogisimVerifier(jar).verify_load(path)
+            try:
+                checks = structural_checks(path)
+                vres["structural"] = checks
+                if not checks["ok"]:
+                    vres["ok"] = False
+                    vres.setdefault(
+                        "error",
+                        "structural checks failed (diagonal wires or subcircuit lib attribute)",
+                    )
+            except Exception as e:  # structural check must never break the tool
+                vres["structural_error"] = str(e)
+            result["verify"] = vres
+        return _json.dumps(result, indent=2)
+    except Exception as e:
+        return _json.dumps({"error": str(e)})
+
+
+@mcp.tool(
     title="Verify With Logisim (Headless Load Test)",
     annotations=ToolAnnotations(idempotentHint=True, openWorldHint=True),
 )
@@ -343,6 +434,19 @@ def verify_with_logisim(path: str, jar: str = str(DEFAULT_ITA_JAR)) -> str:
     """
     verifier = LogisimVerifier(jar)
     result = verifier.verify_load(path)
+    # Structural pre-checks: diagonal wires and subcircuit-lib violations are
+    # known load-killers (hang / modal error dialog). Report them even when
+    # the headless load happens to complete, and fail the overall result.
+    try:
+        from .circ.verifier import structural_checks
+
+        checks = structural_checks(path)
+        result["structural"] = checks
+        if not checks["ok"]:
+            result["ok"] = False
+            result.setdefault("error", "structural checks failed (diagonal wires or subcircuit lib attribute)")
+    except Exception as e:  # structural check must never break the tool
+        result["structural_error"] = str(e)
     return json.dumps(result, indent=2)
 
 

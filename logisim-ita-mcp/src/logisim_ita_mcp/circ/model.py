@@ -62,6 +62,24 @@ class Wire:
     end: Point
 
 
+def wire_l_path(start: Point, end: Point) -> list[Wire]:
+    """Axis-aligned wires from ``start`` to ``end`` — the ONLY sanctioned shape.
+
+    Logisim ITA does NOT support diagonal wires: on load,
+    ``WireRepair.doOverlaps`` spins at 200%+ CPU and allocates gigabytes when
+    diagonals are present, hanging the app. Any tool that needs to connect A
+    to B must route through this helper: it returns a single wire when the
+    points already share an axis, otherwise a horizontal-then-vertical
+    L-shaped pair through the corner ``(end.x, start.y)``.
+    """
+    sx, sy = start
+    ex, ey = end
+    if sx == ex or sy == ey:
+        return [Wire(start=start, end=end)]
+    corner = (ex, sy)
+    return [Wire(start=start, end=corner), Wire(start=corner, end=end)]
+
+
 @dataclass
 class Circuit:
     """A ``<circuit name="…">`` block."""
