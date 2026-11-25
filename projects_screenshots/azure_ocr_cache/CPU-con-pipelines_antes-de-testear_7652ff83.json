@@ -1,0 +1,11 @@
+{
+  "source": "CPU-con-pipelines_antes-de-testear.png",
+  "pages": [
+    {
+      "page_number": 1,
+      "text": "Logisim 2.16.2.2.jar: main of CPU-con-pipelines_untested | File Edit Project Simulate Window Help | CPU-con-pipelines_untested main | # REGISTROS | Wiring | Gates | TTL | Plexers | Arithmetic | RAM | Decd | RESULT/IMM | MUX | COD.OP | MI | COD.OF | Decd | JR | cip | Decd | c out | DATA | STOREDEST | REGS | LOAD REG X POS. | LOADI RET | Zoom: 100%",
+      "confidence": 0.95,
+      "orientation": "unknown"
+    }
+  ]
+}

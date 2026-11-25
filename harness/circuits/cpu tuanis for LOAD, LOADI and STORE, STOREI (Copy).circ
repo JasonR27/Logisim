@@ -297,38 +297,5 @@
       <a name="bit11" val="3"/>
     </comp>
     <comp lib="1" loc="(910,280)" name="OR Gate"/>
-
-    <comp lib="5" loc="(620,460)" name="Register">
-      <a name="width" val="3"/>
-      <a name="label" val="R4"/>
-    </comp>
-    <comp lib="5" loc="(620,520)" name="Register">
-      <a name="width" val="3"/>
-      <a name="label" val="R5"/>
-    </comp>
-    <comp lib="5" loc="(620,580)" name="Register">
-      <a name="width" val="3"/>
-      <a name="label" val="R6"/>
-    </comp>
-    <comp lib="5" loc="(620,640)" name="Register">
-      <a name="width" val="3"/>
-      <a name="label" val="R7"/>
-    </comp>
-    <wire from="(600,470)" to="(600,460)"/>
-    <wire from="(600,470)" to="(600,520)"/>
-    <wire from="(600,470)" to="(600,580)"/>
-    <wire from="(600,470)" to="(600,640)"/>
-    <wire from="(680,460)" to="(680,230)"/>
-    <wire from="(680,520)" to="(680,290)"/>
-    <wire from="(680,580)" to="(680,350)"/>
-    <wire from="(680,640)" to="(680,400)"/>
-    <wire from="(680,230)" to="(240,100)"/>
-    <wire from="(680,290)" to="(240,110)"/>
-    <wire from="(680,350)" to="(240,120)"/>
-    <wire from="(680,400)" to="(240,130)"/>
-    <wire from="(680,460)" to="(240,140)"/>
-    <wire from="(680,520)" to="(240,150)"/>
-    <wire from="(680,580)" to="(240,160)"/>
-    <wire from="(680,640)" to="(240,170)"/>
   </circuit>
 </project>

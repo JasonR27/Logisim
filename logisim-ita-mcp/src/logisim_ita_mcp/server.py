@@ -13,7 +13,7 @@ from .circ.parser import parse
 from .circ.writer import dump_to_file
 from .circ.verifier import LogisimVerifier, DEFAULT_ITA_JAR
 
-mcp = FastMCP("logisim-ita-mcp", version="0.1.0")
+mcp = FastMCP("logisim-ita-mcp", version="0.2.0")
 
 
 @mcp.tool(
@@ -448,6 +448,88 @@ def verify_with_logisim(path: str, jar: str = str(DEFAULT_ITA_JAR)) -> str:
     except Exception as e:  # structural check must never break the tool
         result["structural_error"] = str(e)
     return json.dumps(result, indent=2)
+
+
+@mcp.tool(
+    title="Compare Canvases (Visual Match)",
+    annotations=ToolAnnotations(idempotentHint=True, openWorldHint=False),
+)
+def compare_canvases(reference: str, render: str, box: str = "270,100,1920,1055",
+                     min_inlier_ratio: float = 0.4, max_ae: float = 0.15) -> str:
+    """Decide whether a rendered circuit looks like a reference screenshot.
+
+    The deterministic visual-match gate (S2): crops the circuit canvas from
+    both full-window screenshots, aligns them with ORB keypoints + RANSAC
+    homography (handles zoom/pan differences between captures), then scores
+    pixel AE on the overlap. Replaces naive whole-image AE, which fails
+    (~0.80) on identical circuits shot at different zooms.
+
+    Args:
+        reference: Absolute path of the reference PNG (e.g. professor screenshot).
+        render: Absolute path of the render PNG to check.
+        box: Canvas crop "x0,y0,x1,y1" (default fits 1920x1080 ITA layout).
+        min_inlier_ratio: PASS requires inlier_ratio >= this (default 0.4).
+        max_ae: PASS requires postwarp_ae <= this (default 0.15).
+
+    Returns:
+        JSON string with keypoints, good_matches, inliers, inlier_ratio,
+        est_scale (zoom factor render->reference), overlap_frac, postwarp_ae,
+        and verdict PASS/FAIL. {"error": ...} if opencv is missing or
+        alignment fails (too few keypoints/matches).
+    """
+    try:
+        import cv2
+        import numpy as np
+        from PIL import Image
+    except ImportError as e:
+        return json.dumps({"error": f"compare_canvases needs opencv-python-headless + Pillow: {e}"})
+    try:
+        x0, y0, x1, y1 = (int(v) for v in box.split(","))
+    except ValueError:
+        return json.dumps({"error": f"bad box {box!r}, want 'x0,y0,x1,y1'"})
+    try:
+        from PIL import Image as _I
+        g1 = np.array(_I.open(reference).convert("RGB").crop((x0, y0, x1, y1)))
+        g2 = np.array(_I.open(render).convert("RGB").crop((x0, y0, x1, y1)))
+        g1 = cv2.cvtColor(g1, cv2.COLOR_RGB2GRAY)
+        g2 = cv2.cvtColor(g2, cv2.COLOR_RGB2GRAY)
+        orb = cv2.ORB_create(nfeatures=5000)
+        k1, d1 = orb.detectAndCompute(g1, None)
+        k2, d2 = orb.detectAndCompute(g2, None)
+        if d1 is None or d2 is None or len(d1) < 8 or len(d2) < 8:
+            return json.dumps({"verdict": "FAIL", "error": "too few keypoints",
+                               "keypoints": [len(k1 or []), len(k2 or [])]})
+        matches = cv2.BFMatcher(cv2.NORM_HAMMING).knnMatch(d1, d2, k=2)
+        good = [m for m, n in matches if m.distance < 0.75 * n.distance]
+        if len(good) < 8:
+            return json.dumps({"verdict": "FAIL", "error": "too few matches",
+                               "good_matches": len(good)})
+        src = np.float32([k1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+        dst = np.float32([k2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+        H, mask = cv2.findHomography(dst, src, cv2.RANSAC, 5.0)
+        if H is None:
+            return json.dumps({"verdict": "FAIL", "error": "no homography",
+                               "good_matches": len(good)})
+        inl = int(mask.sum())
+        ratio = inl / len(good)
+        h, w = g1.shape
+        warped = cv2.warpPerspective(g2, H, (w, h))
+        overlap = warped > 0
+        diff = np.abs(g1.astype(np.int16) - warped.astype(np.int16))[overlap]
+        ae = float(diff.mean() / 255.0) if overlap.sum() else 1.0
+        scale = float(np.sqrt(abs(np.linalg.det(H[:2, :2]))))
+        verdict = "PASS" if (ratio >= min_inlier_ratio and ae <= max_ae) else "FAIL"
+        return json.dumps({
+            "reference": reference, "render": render,
+            "keypoints": [len(k1), len(k2)], "good_matches": len(good),
+            "inliers": inl, "inlier_ratio": round(ratio, 4),
+            "est_scale": round(scale, 3),
+            "overlap_frac": round(float(overlap.mean()), 4),
+            "postwarp_ae": round(ae, 6), "verdict": verdict,
+            "thresholds": {"min_inlier_ratio": min_inlier_ratio, "max_ae": max_ae},
+        }, indent=2)
+    except Exception as e:
+        return json.dumps({"error": str(e)})
 
 
 def main():

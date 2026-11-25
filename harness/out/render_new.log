@@ -1,0 +1,6 @@
+[harness] 2026-08-30T04:16:03+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+Aug 30, 2026 4:16:05 AM java.util.prefs.FileSystemPreferences$1 run
+INFO: Created user preferences directory.
+2.16.2.2.jar
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27183B 0.000u 0:00.000
+[harness] 2026-08-30T04:17:45+00:00 screenshot written to /out/logisim_shot.png

@@ -1,0 +1,7 @@
+[harness] 2026-08-30T20:02:15+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+Aug 30, 2026 8:02:17 PM java.util.prefs.FileSystemPreferences$1 run
+INFO: Created user preferences directory.
+2.16.2.2.jar
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 42146B 0.000u 0:00.000
+[harness] 2026-08-30T20:03:56+00:00 screenshot written to /out/logisim_shot.png

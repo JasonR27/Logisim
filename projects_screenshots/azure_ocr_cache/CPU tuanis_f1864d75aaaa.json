@@ -1,0 +1,11 @@
+{
+  "source": "CPU tuanis.png",
+  "pages": [
+    {
+      "page_number": 1,
+      "text": "Logisim 2.16.2.2.jar: main of CPU tuanis\nX\nFile Edit Project Simulate Window Help\nCABO DDD\n+ +\nCPU tuanis\nO main\n> Wiring\n> Gates\n> TTL\n> Plexers\nMI\n> Arithmetic\n> Memory\nPC\n0 00 00 00 00\nIR\n0-1\nDecd\nO\n> Input/Output\n2-3\n> Base\n4|00 00 00 00\n4-5\nDQHA\n8 00 00 00 00\nD\n198\n6-7\nctO\nC\n00 00 00 00\nen\nsel\nMUX\nero\ntc out\nDQ\nbin\nerb\nb out\nDQ\nend\nDQ\nerb\nZoom: 212%",
+      "confidence": 0.95,
+      "orientation": "unknown"
+    }
+  ]
+}

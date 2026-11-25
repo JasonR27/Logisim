@@ -1,0 +1,134 @@
+[harness] 2026-08-28T01:19:28+00:00 start, circuit=/workspace/regen_v2_fixed.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 15072B 0.000u 0:00.000
+[harness] 2026-08-28T01:21:12+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T01:24:23+00:00 start, circuit=/workspace/regen_v3_fixed.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27954B 0.000u 0:00.000
+[harness] 2026-08-28T01:26:07+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:37:50+00:00 start, circuit=/workspace/lab_tarea_1_entrega_vA_definitiva.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27754B 0.000u 0:00.000
+[harness] 2026-08-28T04:39:30+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:39:31+00:00 start, circuit=/workspace/lab_tarea_1_entrega_vA_definitiva_fixed.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27747B 0.000u 0:00.000
+[harness] 2026-08-28T04:41:12+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:41:12+00:00 start, circuit=/workspace/lab_tarea_1_entrega_vA_extendida.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 26658B 0.000u 0:00.000
+[harness] 2026-08-28T04:42:53+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:42:54+00:00 start, circuit=/workspace/lab_tarea_1_entrega_vB_definitiva.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27754B 0.000u 0:00.000
+[harness] 2026-08-28T04:44:35+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:44:36+00:00 start, circuit=/workspace/lab_tarea_1_entrega_vB_literal.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 24860B 0.000u 0:00.000
+[harness] 2026-08-28T04:46:18+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:46:19+00:00 start, circuit=/workspace/cpu_tuanis_option_A_quick_fix.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 54005B 0.000u 0:00.000
+[harness] 2026-08-28T04:47:59+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:48:00+00:00 start, circuit=/workspace/cpu_tuanis_option_B_register_file.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27657B 0.000u 0:00.000
+[harness] 2026-08-28T04:49:39+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:49:40+00:00 start, circuit=/workspace/test_registros8_v1.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27996B 0.000u 0:00.000
+[harness] 2026-08-28T04:51:19+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:51:20+00:00 start, circuit=/workspace/test_working_copy.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27976B 0.000u 0:00.000
+[harness] 2026-08-28T04:52:59+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:53:00+00:00 start, circuit=/workspace/test_subcircuit_ref.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 26218B 0.000u 0:00.000
+[harness] 2026-08-28T04:54:39+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-28T04:54:40+00:00 start, circuit=/workspace/test_hypothesis_lib7_with_label.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 26536B 0.000u 0:00.000
+[harness] 2026-08-28T04:56:19+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-29T01:02:03+00:00 start, circuit=/workspace/test_registros8_recreated.circ, screen=1920x1080x24
+[harness] 2026-08-29T01:02:50+00:00 start, circuit=/workspace/test_registros8_recreated.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 26983B 0.000u 0:00.000
+[harness] 2026-08-29T01:03:45+00:00 screenshot written to /out/logisim_shot.png
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 26983B 0.000u 0:00.000
+[harness] 2026-08-29T01:04:32+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-29T23:39:59+00:00 start, circuit=/workspace/optB_recreated.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27357B 0.000u 0:00.000
+[harness] 2026-08-29T23:40:57+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-29T23:42:31+00:00 start, circuit=/workspace/optB_recreated.circ, screen=1920x1080x24
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27357B 0.000u 0:00.000
+[harness] 2026-08-29T23:43:30+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-29T23:46:28+00:00 start, circuit=/workspace/optB_reference.circ, screen=1920x1080x24
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27357B 0.000u 0:00.000
+[harness] 2026-08-29T23:47:26+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-29T23:52:30+00:00 start, circuit=/workspace/_render_me.circ, screen=1920x1080x24
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27357B 0.000u 0:00.000
+[harness] 2026-08-29T23:53:29+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-29T23:53:30+00:00 start, circuit=/workspace/_render_me.circ, screen=1920x1080x24
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27357B 0.000u 0:00.000
+[harness] 2026-08-29T23:54:28+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-29T23:56:00+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27357B 0.000u 0:00.000
+[harness] 2026-08-29T23:57:05+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T01:27:23+00:00 start, circuit=/workspace/CPU mas tuanis.circ, screen=1920x1080x24
+[harness] 2026-08-30T01:28:12+00:00 start, circuit=/workspace/CPU mas tuanis.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 46509B 0.000u 0:00.000
+[harness] 2026-08-30T01:29:06+00:00 screenshot written to /out/logisim_shot.png
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 46509B 0.000u 0:00.000
+[harness] 2026-08-30T01:29:56+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T01:42:17+00:00 start, circuit=/workspace/ CPU más tuanis + módulo de registros File.circ, screen=1920x1080x24
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 46509B 0.000u 0:00.000
+[harness] 2026-08-30T01:44:01+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T01:44:02+00:00 start, circuit=/workspace/regfile_recreated.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 40834B 0.000u 0:00.000
+[harness] 2026-08-30T01:45:46+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T01:50:21+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 41407B 0.000u 0:00.000
+[harness] 2026-08-30T01:52:06+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T01:52:07+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 40794B 0.000u 0:00.000
+[harness] 2026-08-30T01:53:52+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T02:08:12+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 46180B 0.000u 0:00.000
+[harness] 2026-08-30T02:09:57+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T02:09:58+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 44723B 0.000u 0:00.000
+[harness] 2026-08-30T02:11:43+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T02:25:42+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27919B 0.000u 0:00.000
+[harness] 2026-08-30T02:27:26+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T02:27:27+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27919B 0.000u 0:00.000
+[harness] 2026-08-30T02:29:12+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T02:29:12+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27183B 0.000u 0:00.000
+[harness] 2026-08-30T02:30:56+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T04:13:07+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27183B 0.000u 0:00.000
+[harness] 2026-08-30T04:14:53+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T04:16:03+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 27183B 0.000u 0:00.000
+[harness] 2026-08-30T04:17:45+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T20:02:15+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 42146B 0.000u 0:00.000
+[harness] 2026-08-30T20:03:56+00:00 screenshot written to /out/logisim_shot.png
+[harness] 2026-08-30T20:04:25+00:00 start, circuit=/workspace/render_target.circ, screen=1920x1080x24
+[harness] WARN: stabilization window expired, using last capture
+/out/logisim_shot.png PNG 1920x1080 1920x1080+0+0 8-bit sRGB 46180B 0.000u 0:00.000
+[harness] 2026-08-30T20:06:05+00:00 screenshot written to /out/logisim_shot.png

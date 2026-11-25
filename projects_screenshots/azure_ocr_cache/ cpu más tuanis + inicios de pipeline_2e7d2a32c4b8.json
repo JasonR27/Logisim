@@ -1,0 +1,11 @@
+{
+  "source": " cpu más tuanis + inicios de pipeline.png",
+  "pages": [
+    {
+      "page_number": 1,
+      "text": "Logisim 2.16.2.2.jar: main of cpu más tuanis + inicios de pipeline\nX\nFile Edit Project Simulate Window Help\nA\nDD\n+ +\nv cpu más tuanis + inicios de pipeline\nmain\n# REGISTROS\n> Wiring\n> Gates\n> TTL\nRAM\n> Plexers\n> Arithmetic\nPC\n0 00000000\n. . .\n> Memory\n> Input/Output\nA\nD\n> Base\nIcto\nMI\nCOD.OP\nCOD.OP\nse\n0\n000\n000\nIR\nMUX\n2 000\n000\nDQ\nDQ\n000\nJero\ncig\nLIA\nDecd\n4\n000\nD\n6\n000\n000\nRDEST\nRDEST\nc out\nsel\nerD\nbin\nJerD\n0-2\nb out\n3-5\n6-8\n9-1\nen\nMUX\nREGS\nDQ\n..\nLOAD REG, X, POS.\nLOADI REG; IMM, X\nZoom: 132%\n...",
+      "confidence": 0.95,
+      "orientation": "unknown"
+    }
+  ]
+}

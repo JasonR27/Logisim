@@ -1,0 +1,11 @@
+{
+  "source": " CPU más tuanis + módulo de registros File.png",
+  "pages": [
+    {
+      "page_number": 1,
+      "text": "Logisim 2.16.2.2.jar: main of CPU más tuanis + módulo de registros File\nX\nFile Edit Project Simulate Window Help\nA\n10 DDD\n+\nCPU más tuanis + módulo de registros File\nmain\nREGISTROS\n> Wiring\n> Gates\n> TTL\n> Plexers\n> Arithmetic\nMI.\nRAM\n> Memory\n> Input/Output\nPC\n0\n000\n000\nIR\n3-5\n0 00000000\n> Base\n6-8\nDQ\n2 000\n000\nA\nD\nA\nD\nuctos\n4|\n000\n000\n6\n000\n000\nsel\nse\nciq\nMUX\nc out\nDecd\nbin\nb out\nO\nMUX\nREGS\nLOAD REG, X, POS\nLOADI REG, IMM, X\nZoom: 163%",
+      "confidence": 0.95,
+      "orientation": "unknown"
+    }
+  ]
+}

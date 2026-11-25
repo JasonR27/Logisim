@@ -1,0 +1,1 @@
+{"circuit": "cpu_tuanis_option_B_register_file.circ", "status": "PIXEL-IDENTICAL", "sha256": "3059e2ff182709c4", "comps": 22, "wires": 85, "libs": 8, "structural_diff": 0, "verify": "ok=true", "render_match": "sha256 identical", "via": "logisim-ita-mcp generate_circuit_file tool ONLY", "date": "2026-08-29"}
